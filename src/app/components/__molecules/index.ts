@@ -1,0 +1,1 @@
+export { default as NavTitle } from "./navTitle/NavTitle";
