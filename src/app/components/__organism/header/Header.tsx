@@ -1,6 +1,7 @@
 import React from "react";
 import Bulb from "../../__atoms/bulb/Bulb";
 import Select from "../../__molecules/select/Select";
+import { AddFeedbackButton } from "../../__molecules";
 
 function Header() {
   return (
@@ -16,8 +17,8 @@ function Header() {
           </div>
           <Select />
         </div>
-        <button className="font-bold text-[13px] md:text-sm leading-[100%] px-4 py-[10.5px] md:py-[12.5px] md:px-[25px] bg-[#AD1FEA] rounded-[10px]"><span className="font-bold text-lg">+</span>Add Feedback</button>
-
+        {/* <button className="font-bold text-[13px] md:text-sm leading-[100%] px-4 py-[10.5px] md:py-[12.5px] md:px-[25px] bg-[#AD1FEA] rounded-[10px]"><span className="font-bold text-lg">+</span>Add Feedback</button> */}
+        <AddFeedbackButton />
       </div>
     </header>
   );
