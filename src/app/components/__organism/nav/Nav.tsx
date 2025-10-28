@@ -31,7 +31,7 @@ const Nav = () => {
           <NavRoadMap />
         </div>
       </div>
-      <div className="w-full flex md:hidden">
+      <div className="w-full flex md:hidden mb-8">
         <Header />
       </div>
     </>
