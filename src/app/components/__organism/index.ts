@@ -5,3 +5,5 @@ export { default as NavRoadMap } from "./navRoadMap/NavRoadMap";
 export { default as Header } from "./header/Header";
 export { default as Suggestion } from "./suggestion/Suggestion";
 export { default as NoFeedback } from "./noFeedback/NoFeedback";
+export { default as Feedback } from "./feedback/Feedback";
+export { default as CommentForm } from "./commentForm/CommentForm";
