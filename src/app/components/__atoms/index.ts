@@ -5,3 +5,4 @@ export { default as Check } from "./check/Check";
 export { default as ChevronUp } from "./chevronDown/ChevronDown";
 export { default as Chat } from "./chat/Chat";
 export { default as Feedback } from "./feedback/Feedback";
+export { default as ChevronLeft } from "./chevronLeft/ChevronLeft";
