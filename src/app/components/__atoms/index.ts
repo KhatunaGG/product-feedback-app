@@ -6,3 +6,5 @@ export { default as ChevronUp } from "./chevronDown/ChevronDown";
 export { default as Chat } from "./chat/Chat";
 export { default as Feedback } from "./feedback/Feedback";
 export { default as ChevronLeft } from "./chevronLeft/ChevronLeft";
+export { default as Plus } from "./plus/Plus";
+export { default as Circle } from "./circle/Circle";
