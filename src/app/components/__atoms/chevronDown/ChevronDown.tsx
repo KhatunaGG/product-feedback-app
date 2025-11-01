@@ -1,6 +1,9 @@
-import React from "react";
+export type ChevronDownProps = {
+  isCreateFeedback?: boolean;
 
-const ChevronDown = () => {
+};
+
+const ChevronDown = ({ isCreateFeedback }: ChevronDownProps) => {
   return (
     <svg
       width="9"
@@ -11,7 +14,7 @@ const ChevronDown = () => {
     >
       <path
         d="M0.707031 0.707031L4.70703 4.70703L8.70703 0.707031"
-        stroke="white"
+        stroke={isCreateFeedback ? "#4661E6" : "white"}
         strokeWidth="2"
       />
     </svg>
