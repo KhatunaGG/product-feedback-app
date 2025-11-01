@@ -1,9 +1,19 @@
-import React from "react";
+"use client";
 import { ChevronLeft } from "../../__atoms";
 
-const GoBackButton = () => {
+export type GoBackButtonProps = {
+  isOverlyOpen?: boolean;
+  toggleOverlay?: () => void;
+};
+
+const GoBackButton = ({ toggleOverlay, isOverlyOpen }: GoBackButtonProps) => {
   return (
-    <button className="flex items-center gap-2">
+    <button
+      onClick={() => {
+        if (isOverlyOpen) toggleOverlay?.();
+      }}
+      className="flex items-center gap-2"
+    >
       <ChevronLeft />
       <p>Go Back</p>
     </button>
