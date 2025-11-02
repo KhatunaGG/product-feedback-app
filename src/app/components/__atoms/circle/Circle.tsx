@@ -1,11 +1,11 @@
 import React from "react";
 
-
 const Circle = () => {
   return (
     <svg
-      width="56"
-      height="56"
+      className="w-[40px] h-[40px] md:w-[56px] md:h-[56px]"
+      // width="56"
+      // height="56"
       viewBox="0 0 56 56"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

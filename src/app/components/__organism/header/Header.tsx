@@ -8,7 +8,9 @@ import { useFeedbackStore } from "@/app/store/feedback.store";
 
 function Header() {
   const headerOptions = Object.values(HeaderOptionEnum);
-  const { selectedHeaderOptions, setSelectedHeaderOptions } = useFeedbackStore();
+  const { selectedHeaderOptions, setSelectedHeaderOptions } =
+    useFeedbackStore();
+
 
   return (
     <header className="w-full bg-[#373F68]">
@@ -23,11 +25,12 @@ function Header() {
           <Select
             options={headerOptions}
             value={selectedHeaderOptions}
-            onChange={(val) => setSelectedHeaderOptions(val as HeaderOptionEnum)}
+            onChange={(val) =>
+              setSelectedHeaderOptions(val as HeaderOptionEnum)
+            }
           />
         </div>
-        {/* <button className="font-bold text-[13px] md:text-sm leading-[100%] px-4 py-[10.5px] md:py-[12.5px] md:px-[25px] bg-[#AD1FEA] rounded-[10px]"><span className="font-bold text-lg">+</span>Add Feedback</button> */}
-        <AddFeedbackButton />
+        <AddFeedbackButton  />
       </div>
     </header>
   );
