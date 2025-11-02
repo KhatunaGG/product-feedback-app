@@ -1,4 +1,4 @@
-import { FeedbackDetails } from "@/app/components/__organism";
+import { FeedbackDetails, Overlay } from "@/app/components/__organism";
 import React from "react";
 
 interface PageProps {
@@ -8,7 +8,8 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { id } = await params; 
   return (
-    <div>
+    <div className="relative ">
+      <Overlay feedbackId={id} />
       <FeedbackDetails feedbackId={id} />
     </div>
   );

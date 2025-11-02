@@ -19,10 +19,13 @@ export type UseFeedbackStoreStyle = {
   selectedCategory: CategoryEnum | null;
   selectedStatus: StatusEnum | null;
   selectedHeaderOptions: HeaderOptionEnum | null;
+  // feedbackId: string | null;
   toggleOverlay: () => void;
   setSelectedCategory: (category: CategoryEnum) => void;
   setSelectedStatus: (status: StatusEnum) => void;
   setSelectedHeaderOptions: (selectedHeaderOptions: HeaderOptionEnum) => void;
+// setFeedbackId: (id: string | null) => void;
+
 };
 
 export const useFeedbackStore = create<UseFeedbackStoreStyle>()(
@@ -32,6 +35,11 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>()(
       selectedCategory: CategoryEnum.Feature,
       selectedStatus: StatusEnum.Planned,
       selectedHeaderOptions: HeaderOptionEnum.LeastComment,
+
+
+    //   feedbackId: null,
+    //  setFeedbackId: (id) => set({ feedbackId: id }),
+      
       toggleOverlay: () =>
         set((state) => ({ isOverlyOpen: !state.isOverlyOpen })),
       setSelectedCategory: (category) => {
