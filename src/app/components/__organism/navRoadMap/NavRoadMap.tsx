@@ -3,7 +3,7 @@ import React from "react";
 
 const NavRoadMap = () => {
   return (
-    <div className="w-full min-h-[178px] bg-white px-6 py-[19px] flex flex-col gap-6 rounded-[10px]">
+    <div className="w-full min-h-[178px] bg-white px-6 py-[19px] flex flex-col gap-6 rounded-[10px] shadow-lg">
       <div className="w-full flex items-center justify-between">
         <h2 className="font-bold text-[18px] leading-[100%] tracking-[-0.25px] text-[#3A4374]">
           Roadmap

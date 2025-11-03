@@ -3,7 +3,7 @@ import { OptionsEnum } from "@/app/commons/data";
 
 const NavOptions = () => {
   return (
-    <div className="min-h-[178px] p-6 flex flex-wrap gap-x-4 gap-y-[14px] bg-white rounded-[10px]">
+    <div className="min-h-[178px] p-6 flex flex-wrap gap-x-4 gap-y-[14px] bg-white rounded-[10px] shadow-lg">
       {Object.values(OptionsEnum).map((item, i) => {
         return (
           <button
