@@ -10,3 +10,6 @@ export { default as Form } from "./form/Form";
 export { default as Feedback } from "./feedback/Feedback";
 export { default as Comment } from "./comment/Comment";
 export { default as Overlay } from "./overlay/Overlay";
+export { default as OverlayForm } from "./overlayForm/OverlayForm";
+export { default as SignIn } from "./signIn/SignIn";
+export { default as SignUp } from "./signUp/SignUp";
