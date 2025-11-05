@@ -9,10 +9,7 @@ export type OverlayProps = {
 };
 
 const Overlay = ({ feedbackId }: OverlayProps) => {
-  const {
-    isOverlyOpen,
-     toggleOverlay,
-  } = useFeedbackStore();
+  const { isOverlyOpen, toggleOverlay } = useFeedbackStore();
 
   const isCreateFeedback = isOverlyOpen && !feedbackId;
   const isEditFeedback = Boolean(isOverlyOpen && feedbackId);

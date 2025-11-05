@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "@/app/store/auth.store";
 
 export const signUpSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -21,11 +22,12 @@ export const signUpSchema = z.object({
 export type SignUpType = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
+  const { signUp } = useAuthStore();
   const {
     register,
     formState: { errors },
     handleSubmit,
-    // reset,
+    reset,
   } = useForm<SignUpType>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -33,13 +35,18 @@ const SignUp = () => {
       lastName: "",
       email: "",
       userName: "",
-      password: ""
+      password: "",
     },
   });
 
   const onsubmit = async (formData: SignUpType) => {
     console.log("formData", formData);
     try {
+      const success = await signUp(formData);
+      if (success) {
+        // toast.success("Account created successfully!");
+        reset();
+      }
     } catch (e) {
       toast.error(e as string);
     }
@@ -68,46 +75,6 @@ const SignUp = () => {
         <Input register={register} errors={errors} fieldName="email" />
         <Input register={register} errors={errors} fieldName="userName" />
         <Input register={register} errors={errors} fieldName="password" />
-
-        {/* <div className="w-fill flex  gap-2 flex-col ">
-          <label htmlFor="" className="text-[#647196] text-sm">
-            Name
-          </label>
-          <input
-            type="text"
-            className="w-full  border border-[#e8e3e3] rounded-[5px] px-2 md:px-4 py-2 outline-none"
-          />
-        </div>
-
-        <div className="w-fill flex  gap-2 flex-col ">
-          <label htmlFor="" className="text-[#647196] text-sm">
-            Last Name
-          </label>
-          <input
-            type="text"
-            className="w-full  border border-[#e8e3e3] rounded-[5px] px-2 md:px-4 py-2 outline-none"
-          />
-        </div>
-
-        <div className="w-fill flex  gap-2 flex-col ">
-          <label htmlFor="" className="text-[#647196] text-sm">
-            Email
-          </label>
-          <input
-            type="text"
-            className="w-full  border border-[#e8e3e3] rounded-[5px] px-2 md:px-4 py-2 outline-none"
-          />
-        </div>
-
-        <div className="w-fill flex  gap-2 flex-col ">
-          <label htmlFor="" className="text-[#647196] text-sm">
-            User Name
-          </label>
-          <input
-            type="text"
-            className="w-full  border border-[#e8e3e3] rounded-[5px] px-2 md:px-4 py-2 outline-none"
-          />
-        </div> */}
 
         <div className="w-full flex items-center justify-center mt-4">
           <button className="bg-[#3A4374] rounded-lg w-full py-4 text-white font-bold text-base">
