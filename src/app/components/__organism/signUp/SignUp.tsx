@@ -40,7 +40,7 @@ const SignUp = () => {
   });
 
   const onsubmit = async (formData: SignUpType) => {
-    console.log("formData", formData);
+
     try {
       const success = await signUp(formData);
       if (success) {
