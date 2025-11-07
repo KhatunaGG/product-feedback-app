@@ -6,7 +6,7 @@ export type AddFeedbackButtonProps = {
 };
 
 const AddFeedbackButton = ({ feedbackId }: AddFeedbackButtonProps) => {
-  const { toggleOverlay } = useFeedbackStore();
+  const { toggleOverlay} = useFeedbackStore();
 
   return (
     <button

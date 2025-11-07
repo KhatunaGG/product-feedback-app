@@ -11,7 +11,6 @@ function Header() {
   const { selectedHeaderOptions, setSelectedHeaderOptions } =
     useFeedbackStore();
 
-
   return (
     <header className="w-full bg-[#373F68]">
       <div className="w-full px-6 md:px-0 md:pl-6 md:pr-4 py-[14px] flex items-center justify-between text-white">
@@ -30,7 +29,7 @@ function Header() {
             }
           />
         </div>
-        <AddFeedbackButton  />
+        <AddFeedbackButton />
       </div>
     </header>
   );
