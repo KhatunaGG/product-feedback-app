@@ -1,76 +1,8 @@
-// "use client";
-// import ChevronDown from "../../__atoms/chevronDown/ChevronDown";
-// import { Check } from "../../__atoms";
-
-// export type SelectProps<T extends string> = {
-//   isCreateFeedback?: boolean;
-//   isEditFeedback?: boolean;
-//   options: T[];
-//   value: T | null;
-//   onChange: (val: T) => void;
-// };
-
-// const Select = <T extends string>({
-//   isCreateFeedback,
-//   isEditFeedback,
-//   options,
-//   value,
-// }: SelectProps<T>) => {
-//   return (
-//     <div
-//       className={`${
-//         isCreateFeedback
-//           ? "w-full py-[13px] px-6 bg-[#F7F8FD] rounded-[5px]        relative "
-//           : "min-w-[160px] py-0 px-0"
-//       }   flex items-center justify-between   md:gap-[9px]  relative `}
-//     >
-//       {isCreateFeedback ? (
-//         <p className="text-[#3A4374] text-[15px] font-bold leading-[100%] ">
-//           {value ?? options?.[0]}
-//         </p>
-//       ) : (
-//         <p className="font-bold text-[13px] md:text-sm  leading-[100%] ">
-//           <span className="font-normal ">Sort by :</span>{" "}
-//           {value ?? options?.[0]}
-//         </p>
-//       )}
-//       {/* {value ?? options?.[0]} */}
-
-//       <div
-//         className={`${
-//           isCreateFeedback && "absolute top-1/2 -translate-y-1/2 right-6 z-10 "
-//         } pt-1 `}
-//       >
-//         <ChevronDown isCreateFeedback={isCreateFeedback} />
-//       </div>
-
-//       <div
-//         className={`${
-//           isCreateFeedback || isEditFeedback ? "w-full -bottom-75" : "min-w-[255px] -bottom-55"
-//         } hidden   bg-white shadow-2xl absolute  left-0 rounded-[10px] overflow-hidden`}
-//       >
-//         {options?.map((option) => {
-//           return (
-//             <div
-//               key={option}
-//               className="w-full flex items-center justify-between py-3 px-6 border-b border-b-[#dadbe1]"
-//             >
-//               <p className="text-[#647196]">{option}</p>
-//               {option === value && <Check />}
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Select;
-
-
 "use client";
 import ChevronDown from "../../__atoms/chevronDown/ChevronDown";
 import { Check } from "../../__atoms";
+import { useFeedbackStore } from "@/app/store/feedback.store";
+
 
 export type SelectProps<T extends string> = {
   isCreateFeedback?: boolean;
@@ -87,14 +19,19 @@ const Select = <T extends string>({
   value,
   onChange,
 }: SelectProps<T>) => {
-  // decide style class
-  const wrapperClass = isCreateFeedback || isEditFeedback
-    ? "w-full py-[13px] px-6 bg-[#F7F8FD] rounded-[5px] relative"
-    : "min-w-[160px] py-0 px-0";
+  const { setIsDropDown, isDropDown } = useFeedbackStore();
+
+  const wrapperClass =
+    isCreateFeedback || isEditFeedback
+      ? "w-full py-[13px] px-6 bg-[#F7F8FD] rounded-[5px] relative"
+      : "min-w-[160px] py-0 px-0";
 
   return (
-    <div className={`${wrapperClass} flex items-center justify-between md:gap-[9px] relative`}>
-      {(isCreateFeedback || isEditFeedback) ? (
+    <div
+      onClick={() => setIsDropDown(!isDropDown)}
+      className={`${wrapperClass} flex items-center justify-between md:gap-[9px] relative cursor-pointer`}
+    >
+      {isCreateFeedback || isEditFeedback ? (
         <p className="text-[#3A4374] text-[15px] font-bold leading-[100%]">
           {value ?? options?.[0]}
         </p>
@@ -105,24 +42,33 @@ const Select = <T extends string>({
       )}
       <div
         className={`${
-          (isCreateFeedback || isEditFeedback) && "absolute top-1/2 -translate-y-1/2 right-6 z-10"
-        } pt-1`}
+          (isCreateFeedback || isEditFeedback) &&
+          "absolute top-1/2 -translate-y-1/2 right-6 z-10"
+        } pt-1 bg-yellow-400 ${
+            isDropDown && "rotate-180 transition duration-300 ease-in-out"
+          }`}
       >
-        <ChevronDown isCreateFeedback={isCreateFeedback || isEditFeedback} />
+    
+          <ChevronDown isCreateFeedback={isCreateFeedback || isEditFeedback} />
+  
       </div>
 
       <div
         className={`${
-          (isCreateFeedback || isEditFeedback)
+          isCreateFeedback || isEditFeedback
             ? "w-full -bottom-75"
             : "min-w-[255px] -bottom-55"
-        } hidden bg-white shadow-2xl absolute left-0 rounded-[10px] overflow-hidden`}
+        } ${
+          isDropDown ? "flex" : "hidden"
+        }   shadow-2xl absolute left-0 rounded-[10px] flex-col overflow-hidden  bg-green-200 z-10`}
       >
         {options?.map((option) => (
           <div
             key={option}
-            className="w-full flex items-center justify-between py-3 px-6 border-b border-b-[#dadbe1] cursor-pointer"
-            onClick={() => onChange(option)}
+            className="w-full flex  items-start justify-between py-3 px-6 border-b border-b-[#dadbe1] cursor-pointer"
+            onClick={() => {
+              onChange(option);
+            }}
           >
             <p className="text-[#647196]">{option}</p>
             {option === value && <Check />}

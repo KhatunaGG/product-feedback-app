@@ -41,10 +41,10 @@ const Input = <T extends FieldValues>({
   fieldName,
 }: InputType<T>) => {
   const error = errors[fieldName]?.message as string | undefined;
-  console.log('error', error)
+
 
   return (
-    <div className="w-fill flex  gap-2 flex-col ">
+    <div className="w-fill flex  gap-2 flex-col relative">
       <label htmlFor="" className="text-[#647196] text-sm">
         {normalizeFieldNames(fieldName as FieldNameType)}
       </label>
@@ -53,6 +53,11 @@ const Input = <T extends FieldValues>({
         type="text"
         className="w-full  border border-[#e8e3e3] rounded-[5px] px-2 md:px-4 py-2 outline-none"
       />
+          {error && (
+        <span className="text-red-600 text-xs mt-1 absolute left-1 -bottom-4">
+          {error}
+        </span>
+      )}
     </div>
   );
 };

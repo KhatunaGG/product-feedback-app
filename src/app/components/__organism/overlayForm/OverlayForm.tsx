@@ -6,21 +6,24 @@ import { useFeedbackStore } from "@/app/store/feedback.store";
 import Select from "../../__molecules/select/Select";
 // import { toast } from "react-toastify";
 import z from "zod";
-
+import { Input } from "../../__molecules";
 
 export type OverlayFormProps = {
   isCreateFeedback?: boolean;
   isEditFeedback?: boolean;
 };
 
-export const schema = z.object({
-  title: z.string().min(1, "Feedback title is refired"),
-  category: z.string().min(1, "Please select the category"),
-  status: z.string().optional(),
-  text: z.string().min(1, "Feedback Detail is refired"),
+
+export const interActiveSchema = z.object({
+  content: z.string().min(1, "Content is required"),
+  title: z.string().min(1, "Title is required"),
+  category: z
+    .enum(["All", "Feature", "UI", "UX", "Enhancement", "Bug"])
+    .optional(),
+  status: z.enum(["Planned", "Suggestion", "In-Progress", "Live"]).optional(),
 });
 
-export type FeedbackType = z.infer<typeof schema>;
+export type InterActiveType = z.infer<typeof interActiveSchema>;
 
 const OverlayForm = ({
   isCreateFeedback,
@@ -36,22 +39,30 @@ const OverlayForm = ({
   } = useFeedbackStore();
 
   const {
-    // register,
-    // formState: { errors },
-    // handleSubmit,
-    // reset
-  } = useForm<FeedbackType>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      title: "",
-      category: "",
-      status: "",
-      text: "",
-    },
+    register,
+    formState: { errors },
+    handleSubmit,
+    // reset,
+  } = useForm<InterActiveType>({
+    resolver: zodResolver(interActiveSchema),
+    defaultValues: {},
   });
 
+  const onSubmit = async (formData: InterActiveType) => {
+    const fullFormData: InterActiveType = {
+      ...formData,
+      category: selectedCategory ?? undefined,
+      status: selectedStatus ?? undefined,
+      // content: contentValue,
+    };
+    console.log("fullFormData", fullFormData);
+  };
+
   return (
-    <form className="w-full flex flex-col flex=col gap-10">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full flex flex-col flex=col gap-10"
+    >
       <div className="w-full flex flex-col gap-6">
         <div className="flex w-full flex-col gap-4">
           <div className="flex flex-col gap-1 items-start">
@@ -62,11 +73,8 @@ const OverlayForm = ({
               Add a short, descriptive headline
             </p>
           </div>
-          {/* <textarea className="min-h-12 resize-none bg-[#F7F8FD] rounded-[5px] outline-none px-6 "></textarea> */}
-          <input
-            type="text"
-            className="py-[13px] px-6 bg-[#F7F8FD] rounded-[5px] outline-none w-full"
-          />
+
+          <Input register={register} errors={errors} fieldName="title" />
         </div>
 
         <div className="flex w-full flex-col gap-4">
@@ -108,7 +116,7 @@ const OverlayForm = ({
           </div>
         )}
 
-        <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 relative">
           <div className="flex flex-col gap-1 items-start">
             <h2 className="text-[#3A4374] text-[13px] font-bold leading-[100%] tracking-[-0.18px]">
               Feedback Detail
@@ -118,7 +126,15 @@ const OverlayForm = ({
               etc.
             </p>
           </div>
-          <textarea className="w-full resize-none min-h-[96px] rounded-[5px] bg-[#F7F8FD] py-[13px] px-6 outline-none"></textarea>
+          <textarea
+            {...register("content")}
+            className="w-full resize-none min-h-[96px] rounded-[5px] bg-[#F7F8FD] py-[13px] px-6 outline-none"
+          ></textarea>
+          {errors.content?.message && (
+            <span className="text-red-600 absolute text-xs left-1 bottom-0">
+              {errors.content.message}
+            </span>
+          )}
         </div>
       </div>
 
@@ -130,7 +146,10 @@ const OverlayForm = ({
         <button className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#3A4374] md:hidden">
           Cancel
         </button>
-        <button className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#AD1FEA] md:hidden">
+        <button
+          type="submit"
+          className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#AD1FEA] md:hidden"
+        >
           {isCreateFeedback ? "Add Feedback" : "Save Changes"}
         </button>
 
@@ -138,7 +157,10 @@ const OverlayForm = ({
           <button className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#3A4374]">
             Cancel
           </button>
-          <button className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#AD1FEA]">
+          <button
+            type="submit"
+            className="py-[12.5px] px-6 text-white font-bold text-sm leading-[100%] rounded-[10px] bg-[#AD1FEA]"
+          >
             {isCreateFeedback ? "Add Feedback" : "Save Changes"}
           </button>
         </div>
