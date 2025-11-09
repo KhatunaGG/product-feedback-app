@@ -7,6 +7,7 @@ import Select from "../../__molecules/select/Select";
 // import { toast } from "react-toastify";
 import z from "zod";
 import { Input } from "../../__molecules";
+import { toast } from "react-toastify";
 
 export type OverlayFormProps = {
   isCreateFeedback?: boolean;
@@ -36,13 +37,14 @@ const OverlayForm = ({
     selectedCategory,
     selectedStatus,
     setSelectedStatus,
+    createFeedback
   } = useFeedbackStore();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    // reset,
+    reset,
   } = useForm<InterActiveType>({
     resolver: zodResolver(interActiveSchema),
     defaultValues: {},
@@ -55,7 +57,15 @@ const OverlayForm = ({
       status: selectedStatus ?? undefined,
       // content: contentValue,
     };
-    console.log("fullFormData", fullFormData);
+    try {
+      const success = await createFeedback(fullFormData);
+      if(success) {
+       reset();
+      }
+
+    }catch(e) {
+      toast.error(e as string);
+    }
   };
 
   return (
