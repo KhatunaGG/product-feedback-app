@@ -44,7 +44,7 @@ const Select = <T extends string>({
         className={`${
           (isCreateFeedback || isEditFeedback) &&
           "absolute top-1/2 -translate-y-1/2 right-6 z-10"
-        } pt-1 bg-yellow-400 ${
+        } pt-1 ${
             isDropDown && "rotate-180 transition duration-300 ease-in-out"
           }`}
       >
@@ -60,7 +60,7 @@ const Select = <T extends string>({
             : "min-w-[255px] -bottom-55"
         } ${
           isDropDown ? "flex" : "hidden"
-        }   shadow-2xl absolute left-0 rounded-[10px] flex-col overflow-hidden  bg-green-200 z-10`}
+        }   shadow-2xl absolute left-0 rounded-[10px] flex-col overflow-hidden   z-10`}
       >
         {options?.map((option) => (
           <div

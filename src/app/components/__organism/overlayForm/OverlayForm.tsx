@@ -60,7 +60,9 @@ const OverlayForm = ({
     try {
       const success = await createFeedback(fullFormData);
       if(success) {
+  
        reset();
+ 
       }
 
     }catch(e) {

@@ -36,10 +36,11 @@ export type AddFeedbackButtonProps = {
 
 const AddFeedbackButton = ({ feedbackId }: AddFeedbackButtonProps) => {
   const { toggleOverlay } = useFeedbackStore();
-  const { accessToken } = useAuthStore();
+  const accessToken = useAuthStore.getState().accessToken;
   const router = useRouter();
 
   const handleClick = () => {
+    console.log(accessToken, "accessToken fron BUTTON")
     if (!accessToken) {
       toast.info("You must be registered to create feedback.");
       router.push('/sign-up')

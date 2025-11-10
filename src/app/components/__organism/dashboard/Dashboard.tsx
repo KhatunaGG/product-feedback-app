@@ -1,6 +1,9 @@
 "use client";
 import Header from "../header/Header";
 import Feedback from "../feedback/Feedback";
+import { useFeedbackStore } from "@/app/store/feedback.store";
+import { useEffect } from "react";
+import NoFeedback from "../noFeedback/NoFeedback";
 // import { useAuthStore } from "@/app/store/auth.store";
 // import { useEffect } from "react";
 // import { AnimateSpin } from "../../__molecules";
@@ -35,7 +38,12 @@ const Dashboard = () => {
   //   return <AnimateSpin />;
   // }
 
+  const { getAllFeedbacks, feedbackData } = useFeedbackStore();
+  console.log("feedbackData", feedbackData);
 
+  useEffect(() => {
+    getAllFeedbacks();
+  }, [getAllFeedbacks]);
 
   return (
     <div className="w-full flex flex-col gap-8 md:gap-4 lg:gap-6">
@@ -43,10 +51,15 @@ const Dashboard = () => {
         <Header />
       </div>
       {/* <NoFeedback /> */}
-      {Array.isArray(data) &&
-        data.map((item) => {
-          return <Feedback {...item} key={item.id} />;
-        })}
+
+      {feedbackData.length === 0 ? (
+        <NoFeedback />
+      ) : (
+        Array.isArray(feedbackData) &&
+        feedbackData.map((item) => {
+          return <Feedback {...item} key={item._id} />;
+        })
+      )}
     </div>
   );
 };

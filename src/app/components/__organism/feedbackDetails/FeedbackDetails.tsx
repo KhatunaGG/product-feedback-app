@@ -1,7 +1,7 @@
 "use client";
 import { AddFeedbackButton, GoBackButton } from "../../__molecules";
 import Form from "../form/Form";
-import Feedback from "../feedback/Feedback";
+// import Feedback from "../feedback/Feedback";
 import Comment from "../comment/Comment";
 
 export type FeedbackProps = {
@@ -19,7 +19,7 @@ const FeedbackDetails = ({ feedbackId }: FeedbackProps) => {
         </div>
 
         <div className="w-full ">
-          <Feedback title={""} id={""} />
+          {/* <Feedback title={""} id={""} /> */}
         </div>
 
         <div className="w-full flex flex-col bg-white rounded-[10px] shadow-xl gap-[28px] px-6 py-6 md:px-8">

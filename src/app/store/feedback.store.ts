@@ -103,6 +103,7 @@ export type DbFeedbackType = {
   comments: DbCommentType[];
   _id: string;
   createdAt: string;
+  feedbackOwnerId: string;
 };
 
 export type UseFeedbackStoreStyle = {
@@ -122,9 +123,10 @@ export type UseFeedbackStoreStyle = {
   setIsDropDown: (val: boolean) => void;
   // setFeedbackId: (id: string | null) => void;
   createFeedback: (formData: InterActiveType) => Promise<boolean>;
+  getAllFeedbacks: () => Promise<void>;
 };
 
-export const useFeedbackStore = create<UseFeedbackStoreStyle>((set) => ({
+export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
   isLoading: false,
   axiosError: null,
   isOverlyOpen: false,
@@ -153,7 +155,12 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set) => ({
       });
 
       if (res.status >= 200 && res.status <= 204) {
-        set({ isLoading: false, axiosError: null, feedbackData: res.data });
+        await get().getAllFeedbacks();
+        set({
+          isLoading: false,
+          axiosError: null,
+          selectedCategory: CategoryEnum.Feature,
+        });
         return true;
       }
       set({ isLoading: false });
@@ -162,6 +169,56 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set) => ({
       const errorMessage = handleApiError(e as AxiosError<ErrorResponse>);
       set({ axiosError: errorMessage, isLoading: false });
       return false;
+    }
+  },
+  // getAllFeedbacks: async () => {
+  //   set({ isLoading: true, axiosError: null });
+  //   try {
+  //     const res = await axiosInstance.get("/feedback");
+  //     if (res.status >= 200 && res.status <= 204) {
+  //       set({ axiosError: null, isLoading: false, feedbackData: res.data });
+  //       console.log(res.data, "res.data")
+  //     }
+  //   } catch (e) {
+  //     const errorMessage = handleApiError(e as AxiosError<ErrorResponse>);
+  //     set({ axiosError: errorMessage, isLoading: false });
+  //   }
+  // },
+  getAllFeedbacks: async () => {
+    set({ isLoading: true, axiosError: null });
+
+    try {
+      const res = await axiosInstance.get("/feedback");
+
+      console.log("Full response:", res);
+      console.log("Response status:", res.status);
+      console.log("Response data:", res.data);
+
+      if (res.status >= 200 && res.status < 300) {
+        // Check if data is an array or needs to be accessed differently
+        const feedbackArray = Array.isArray(res.data)
+          ? res.data
+          : res.data.data || [];
+
+        set({
+          axiosError: null,
+          isLoading: false,
+          feedbackData: feedbackArray,
+        });
+
+        console.log("Feedback data set:", feedbackArray);
+      } else {
+        set({
+          isLoading: false,
+          axiosError: `Unexpected status code: ${res.status}`,
+        });
+      }
+    } catch (e) {
+      console.error("Error in getAllFeedbacks:", e);
+      console.error("Error response:", (e as AxiosError)?.response);
+
+      const errorMessage = handleApiError(e as AxiosError<ErrorResponse>);
+      set({ axiosError: errorMessage, isLoading: false });
     }
   },
 }));
