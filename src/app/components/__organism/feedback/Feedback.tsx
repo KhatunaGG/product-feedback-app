@@ -1,17 +1,27 @@
-"use client"
+"use client";
 import ChevronUp from "../../__atoms/chevronUp/ChevronUp";
 import { Chat } from "../../__atoms";
 import Link from "next/link";
+import { CategoryEnum } from "@/app/commons/data";
+import { DbCommentType } from "@/app/store/feedback.store";
 
 export type SuggestionProps = {
   title: string;
-  id: string
-}
+  _id: string;
+  content: string;
+  category: CategoryEnum | null;
+  comments:  DbCommentType[];
+};
 
-const Feedback = ({id, title}: SuggestionProps) => {
+const Feedback = ({ _id, title, content, category, comments }: SuggestionProps) => {
+  console.log(comments, "comments")
   return (
     <>
-      <Link key={id} href={`/${id}`} className="w-full bg-white rounded-[10px] px-8 py-[28px] flex-col flex md:flex-row items-start  gap-10 shadow-lg">
+      <Link
+        key={_id}
+        href={`/${_id}`}
+        className="w-full bg-white rounded-[10px] px-8 py-[28px] flex-col flex md:flex-row items-start  gap-10 shadow-lg"
+      >
         <div className="COUNTER md:flex items-start hidden">
           <div className="rounded-[10px] bg-[#F2F4FE] flex flex-col gap-2 items-center justify-center px-[9px] pt-[14px] pb-2">
             <ChevronUp />
@@ -27,15 +37,16 @@ const Feedback = ({id, title}: SuggestionProps) => {
               <h2 className="text-[#3A4374] text-[18px] font-bold leading-[100%] tracking-[-0.25px]">
                 {/* Add a dark theme option */}
                 {title}
-
               </h2>
               <p className="text-base font-normal leading-[100%] text-[#647196]">
-                It would help people with light sensitivities and who prefer
-                dark mode.
+                {/* It would help people with light sensitivities and who prefer
+                dark mode. */}
+                {content}
               </p>
             </div>
             <p className="block px-4 py-2 rounded-[10px] bg-[#F2F4FE] text-[13px] font-semibold leading-[100%] text-[#4661E6]">
-              Enhancement
+              {/* Enhancement */}
+              {category}
             </p>
           </div>
 
@@ -43,7 +54,8 @@ const Feedback = ({id, title}: SuggestionProps) => {
             <div className="flex items-center justify-center gap-2">
               <Chat />
               <p className="text-base font-bold leading-[100%] tracking-[-0.18px] text-[#3A4374]">
-                4
+                 {/* {comments.length > 0 ? comments.length : 0} */}
+                 {comments.length}
               </p>
             </div>
           </div>
@@ -59,8 +71,8 @@ const Feedback = ({id, title}: SuggestionProps) => {
 
           <div className="flex items-center justify-center gap-2">
             <Chat />
-            <p className="text-base font-bold leading-[100%] tracking-[-0.18px] text-[#3A4374]">
-              4
+            <p className="text-base font-bold leading-[100%] tracking-[-0.18px] text-[#3A4374] bg-green-300">
+              {comments.length > 0 ? comments.length : 0}
             </p>
           </div>
         </div>
