@@ -1,67 +1,3 @@
-// // import axios, { AxiosError } from "axios";
-// import { create } from "zustand";
-// import { persist } from "zustand/middleware";
-// import { CategoryEnum, HeaderOptionEnum, StatusEnum } from "../commons/data";
-
-// // export interface ErrorResponse {
-// //   message: string;
-// // }
-
-// // const handleApiError = (error: AxiosError<ErrorResponse>): string => {
-// //   if (axios.isAxiosError(error)) {
-// //     return error.response?.data.message || "An error occurred";
-// //   }
-// //   return "An unexpected error occurred";
-// // };
-
-// export type UseFeedbackStoreStyle = {
-//   isOverlyOpen: boolean;
-//   selectedCategory: CategoryEnum | null;
-//   selectedStatus: StatusEnum | null;
-//   selectedHeaderOptions: HeaderOptionEnum | null;
-//   isDropDown: boolean;
-
-//   toggleOverlay: () => void;
-//   setSelectedCategory: (category: CategoryEnum) => void;
-//   setSelectedStatus: (status: StatusEnum) => void;
-//   setSelectedHeaderOptions: (selectedHeaderOptions: HeaderOptionEnum) => void;
-//   setIsDropDown: () => void;
-//   // setFeedbackId: (id: string | null) => void;
-// };
-
-// export const useFeedbackStore = create<UseFeedbackStoreStyle>()(
-//   persist(
-//     (set) => ({
-//       isOverlyOpen: false,
-//       selectedCategory: CategoryEnum.Feature,
-//       selectedStatus: StatusEnum.Planned,
-//       selectedHeaderOptions: HeaderOptionEnum.LeastComment,
-//       isDropDown: false,
-
-//       //   feedbackId: null,
-//       //  setFeedbackId: (id) => set({ feedbackId: id }),
-
-//       toggleOverlay: () =>
-//         set((state) => ({ isOverlyOpen: !state.isOverlyOpen })),
-//       setSelectedCategory: (category) => {
-//         set({ selectedCategory: category });
-//       },
-//       setSelectedStatus: (status) => set({ selectedStatus: status }),
-//       setSelectedHeaderOptions: (option) =>
-//         set({ selectedHeaderOptions: option }),
-//       setIsDropDown: () => set((state) => ({ isDropDown: !state.isDropDown })),
-//     }),
-
-//     {
-//       name: "feedback-store",
-//       partialize: (state) =>
-//         Object.fromEntries(
-//           Object.entries(state).filter(([key]) => key !== "isOverlyOpen")
-//         ),
-//     }
-//   )
-// );
-
 import { create } from "zustand";
 import { CategoryEnum, HeaderOptionEnum, StatusEnum } from "../commons/data";
 import { InterActiveType } from "../components/__organism/overlayForm/OverlayForm";
@@ -104,6 +40,8 @@ export type DbFeedbackType = {
   _id: string;
   createdAt: string;
   feedbackOwnerId: string;
+
+  likes: number;
 };
 
 export type UseFeedbackStoreStyle = {
@@ -115,6 +53,7 @@ export type UseFeedbackStoreStyle = {
   selectedHeaderOptions: HeaderOptionEnum | null;
   isDropDown: boolean;
   feedbackData: DbFeedbackType[];
+  feedbackByParams: DbFeedbackType | null;
 
   toggleOverlay: () => void;
   setSelectedCategory: (category: CategoryEnum) => void;
@@ -124,6 +63,7 @@ export type UseFeedbackStoreStyle = {
   // setFeedbackId: (id: string | null) => void;
   createFeedback: (formData: InterActiveType) => Promise<boolean>;
   getAllFeedbacks: () => Promise<void>;
+  getFeedbackById: (feedbackId: string) => Promise<void>;
 };
 
 export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
@@ -135,6 +75,7 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
   selectedHeaderOptions: HeaderOptionEnum.LeastComment,
   isDropDown: false,
   feedbackData: [],
+  feedbackByParams: null,
 
   // toggle overlay
   toggleOverlay: () => set((state) => ({ isOverlyOpen: !state.isOverlyOpen })),
@@ -160,6 +101,7 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
           isLoading: false,
           axiosError: null,
           selectedCategory: CategoryEnum.Feature,
+          isOverlyOpen: false,
         });
         return true;
       }
@@ -189,13 +131,7 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
 
     try {
       const res = await axiosInstance.get("/feedback");
-
-      console.log("Full response:", res);
-      console.log("Response status:", res.status);
-      console.log("Response data:", res.data);
-
       if (res.status >= 200 && res.status < 300) {
-        // Check if data is an array or needs to be accessed differently
         const feedbackArray = Array.isArray(res.data)
           ? res.data
           : res.data.data || [];
@@ -205,18 +141,27 @@ export const useFeedbackStore = create<UseFeedbackStoreStyle>((set, get) => ({
           isLoading: false,
           feedbackData: feedbackArray,
         });
-
-        console.log("Feedback data set:", feedbackArray);
       } else {
         set({
           isLoading: false,
-          axiosError: `Unexpected status code: ${res.status}`,
+          axiosError: null,
         });
       }
     } catch (e) {
-      console.error("Error in getAllFeedbacks:", e);
-      console.error("Error response:", (e as AxiosError)?.response);
+      const errorMessage = handleApiError(e as AxiosError<ErrorResponse>);
+      set({ axiosError: errorMessage, isLoading: false });
+    }
+  },
+  getFeedbackById: async (feedbackId: string) => {
+    set({ isLoading: true, axiosError: null });
+    try {
+      const res = await axiosInstance.get(`/feedback/${feedbackId}`);
 
+      if (res.status >= 200 && res.status <= 204) {
+        set({ isLoading: false, axiosError: null, feedbackByParams: res.data });
+        console.log('res.data', res.data)
+      }
+    } catch (e) {
       const errorMessage = handleApiError(e as AxiosError<ErrorResponse>);
       set({ axiosError: errorMessage, isLoading: false });
     }

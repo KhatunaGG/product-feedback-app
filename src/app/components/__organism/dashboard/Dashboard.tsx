@@ -2,29 +2,9 @@
 import Header from "../header/Header";
 import Feedback from "../feedback/Feedback";
 import { useFeedbackStore } from "@/app/store/feedback.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NoFeedback from "../noFeedback/NoFeedback";
-// import { useAuthStore } from "@/app/store/auth.store";
-// import { useEffect } from "react";
-// import { AnimateSpin } from "../../__molecules";
-
-// import NoFeedback from "../noFeedback/NoFeedback";
-
-export type SuggestionDataType = {
-  title: string;
-  id: string;
-};
-
-export const data: SuggestionDataType[] = [
-  {
-    title: "Add a dark theme option",
-    id: "1111",
-  },
-  {
-    title: "Add tags for solutions",
-    id: "2222",
-  },
-];
+import { AnimateSpin } from "../../__molecules";
 
 const Dashboard = () => {
   // const initialize = useAuthStore((state) => state.initialize);
@@ -38,25 +18,33 @@ const Dashboard = () => {
   //   return <AnimateSpin />;
   // }
 
-  const { getAllFeedbacks, feedbackData } = useFeedbackStore();
-  console.log("feedbackData", feedbackData);
+  const { getAllFeedbacks, feedbackData, isLoading } = useFeedbackStore();
+  const [hasLoaded, setHasLoaded] = useState<boolean>();
 
   useEffect(() => {
-    getAllFeedbacks();
+    (async () => {
+      await  getAllFeedbacks();
+      setHasLoaded(true);
+    })();
   }, [getAllFeedbacks]);
+
+
+  if(isLoading && !hasLoaded) {
+    return <AnimateSpin />
+  }
+
+  const hasFeedbacks = Array.isArray(feedbackData) && feedbackData.length > 0;
 
   return (
     <div className="w-full flex flex-col gap-8 md:gap-4 lg:gap-6">
       <div className="w-full  hidden md:flex">
         <Header />
       </div>
-      {/* <NoFeedback /> */}
-
-      {feedbackData.length === 0 ? (
+      {hasLoaded && !hasFeedbacks ? (
         <NoFeedback />
       ) : (
-        Array.isArray(feedbackData) &&
-        feedbackData.map((item) => {
+        hasLoaded && 
+         feedbackData.map((item) => {
           return <Feedback {...item} key={item._id} />;
         })
       )}

@@ -10,11 +10,18 @@ export type SuggestionProps = {
   _id: string;
   content: string;
   category: CategoryEnum | null;
-  comments:  DbCommentType[];
+  comments: DbCommentType[];
+  likes: number;
 };
 
-const Feedback = ({ _id, title, content, category, comments }: SuggestionProps) => {
-  console.log(comments, "comments")
+const Feedback = ({
+  _id,
+  title,
+  content,
+  category,
+  comments,
+  likes,
+}: SuggestionProps) => {
   return (
     <>
       <Link
@@ -26,7 +33,7 @@ const Feedback = ({ _id, title, content, category, comments }: SuggestionProps) 
           <div className="rounded-[10px] bg-[#F2F4FE] flex flex-col gap-2 items-center justify-center px-[9px] pt-[14px] pb-2">
             <ChevronUp />
             <p className=" text-[13px] font-bold leading-[100%] tracking-[-0.18px] text-[#3A4374]">
-              111
+              {likes}
             </p>
           </div>
         </div>
@@ -54,8 +61,8 @@ const Feedback = ({ _id, title, content, category, comments }: SuggestionProps) 
             <div className="flex items-center justify-center gap-2">
               <Chat />
               <p className="text-base font-bold leading-[100%] tracking-[-0.18px] text-[#3A4374]">
-                 {/* {comments.length > 0 ? comments.length : 0} */}
-                 {comments.length}
+                {/* {comments.length > 0 ? comments.length : 0} */}
+                {comments.length}
               </p>
             </div>
           </div>
