@@ -14,7 +14,6 @@ export type OverlayFormProps = {
   isEditFeedback?: boolean;
 };
 
-
 export const interActiveSchema = z.object({
   content: z.string().min(1, "Content is required"),
   title: z.string().min(1, "Title is required"),
@@ -22,6 +21,8 @@ export const interActiveSchema = z.object({
     .enum(["All", "Feature", "UI", "UX", "Enhancement", "Bug"])
     .optional(),
   status: z.enum(["Planned", "Suggestion", "In-Progress", "Live"]).optional(),
+
+  likes: z.number().optional(),
 });
 
 export type InterActiveType = z.infer<typeof interActiveSchema>;
@@ -37,7 +38,7 @@ const OverlayForm = ({
     selectedCategory,
     selectedStatus,
     setSelectedStatus,
-    createFeedback
+    createFeedback,
   } = useFeedbackStore();
 
   const {
@@ -47,7 +48,15 @@ const OverlayForm = ({
     reset,
   } = useForm<InterActiveType>({
     resolver: zodResolver(interActiveSchema),
-    defaultValues: {},
+    defaultValues: {
+      content: "",
+      title: "",
+      category: CategoryEnum.Feature,
+      status: StatusEnum.Planned,
+
+      
+      likes: 0,
+    },
   });
 
   const onSubmit = async (formData: InterActiveType) => {
@@ -59,13 +68,10 @@ const OverlayForm = ({
     };
     try {
       const success = await createFeedback(fullFormData);
-      if(success) {
-  
-       reset();
- 
+      if (success) {
+        reset();
       }
-
-    }catch(e) {
+    } catch (e) {
       toast.error(e as string);
     }
   };
